@@ -9,28 +9,39 @@ import {
 } from 'sequelize-typescript';
 import { PersonPlaylist } from './PersonPlaylist';
 import { Playlist } from './Playlist';
+import { ObjectType, Field } from 'type-graphql';
 
+@ObjectType()
 @Table({
   tableName: 'person',
   modelName: 'Person',
   underscored: true,
 })
 export class Person extends Model<Person> {
+  @Field()
   @Column({ primaryKey: true })
   userName: string;
 
+  @Field({ nullable: true })
   @Column
   firstName: string;
 
+  @Field({ nullable: true })
   @Column
   lastName: string;
 
+  @Field({ nullable: true })
   @Column
   email: string;
 
   @Column
+  password: string;
+
+  @Field({ nullable: true })
+  @Column
   phoneNumber: string;
 
+  @Field({ nullable: true })
   @Column
   birthDate: Date;
 
