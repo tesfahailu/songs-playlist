@@ -29,6 +29,11 @@ module.exports = {
         allowNull: false,
         unique: false,
       },
+      token_version: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        unique: false,
+      },
       phone_number: {
         type: Sequelize.STRING,
         allowNull: true,

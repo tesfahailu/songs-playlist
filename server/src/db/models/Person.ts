@@ -6,6 +6,7 @@ import {
   UpdatedAt,
   DeletedAt,
   BelongsToMany,
+  DataType,
 } from 'sequelize-typescript';
 import { PersonPlaylist } from './PersonPlaylist';
 import { Playlist } from './Playlist';
@@ -36,6 +37,9 @@ export class Person extends Model<Person> {
 
   @Column
   password: string;
+
+  @Column({ type: DataType.INTEGER, defaultValue: 0 })
+  tokenVersion: number;
 
   @Field({ nullable: true })
   @Column
