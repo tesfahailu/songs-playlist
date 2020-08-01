@@ -25,8 +25,8 @@ export class AuthResolver {
     try {
       await Person.create({
         userName,
-        email,
         password: hashedPassword,
+        email,
       });
     } catch (err) {
       console.log(err);
