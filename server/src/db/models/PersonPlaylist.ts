@@ -9,17 +9,21 @@ import {
 } from 'sequelize-typescript';
 import { Person } from './Person';
 import { Playlist } from './Playlist';
+import { ObjectType, Field } from 'type-graphql';
 
+@ObjectType()
 @Table({
   tableName: 'person_playlist',
   modelName: 'PersonPlaylist',
   underscored: true,
 })
 export class PersonPlaylist extends Model<PersonPlaylist> {
+  @Field()
   @ForeignKey(() => Person)
   @Column
   userName: string;
 
+  @Field()
   @ForeignKey(() => Playlist)
   @Column
   playlistId: number;

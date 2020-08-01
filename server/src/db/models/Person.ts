@@ -25,15 +25,15 @@ export class Person extends Model<Person> {
 
   @Field({ nullable: true })
   @Column
-  firstName: string;
+  firstName?: string;
 
   @Field({ nullable: true })
   @Column
-  lastName: string;
+  lastName?: string;
 
   @Field({ nullable: true })
   @Column
-  email: string;
+  email?: string;
 
   @Column
   password: string;
@@ -43,14 +43,15 @@ export class Person extends Model<Person> {
 
   @Field({ nullable: true })
   @Column
-  phoneNumber: string;
+  phoneNumber?: string;
 
   @Field({ nullable: true })
   @Column
-  birthDate: Date;
+  birthDate?: Date;
 
+  @Field({ nullable: true })
   @CreatedAt
-  createdAt: Date;
+  createdAt?: Date;
 
   @UpdatedAt
   updatedAt: Date;
@@ -58,6 +59,7 @@ export class Person extends Model<Person> {
   @DeletedAt
   deletedAt: Date;
 
+  @Field(() => [Playlist], { nullable: true })
   @BelongsToMany(() => Playlist, () => PersonPlaylist)
-  playlist: Playlist[];
+  playlist?: Playlist[];
 }
