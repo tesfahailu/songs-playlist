@@ -92,15 +92,20 @@ export class PersonResolver {
     const person = await Person.findOne({ where: { userName } });
     if (person) throw new Error('user name is already used');
 
-    return await Person.create({
-      userName,
-      password,
-      firstName,
-      lastName,
-      email,
-      phoneNumber,
-      birthDate,
-    });
+    try {
+      return await Person.create({
+        userName,
+        password,
+        firstName,
+        lastName,
+        email,
+        phoneNumber,
+        birthDate,
+      });
+    } catch (err) {
+      console.log(err);
+      throw new Error('could not create user');
+    }
   }
 
   @Mutation(() => Person)
@@ -118,22 +123,28 @@ export class PersonResolver {
   ): Promise<Person | null> {
     const person = Person.findOne({ where: { userName } });
     if (!person) throw new Error('user name does not exist');
-    return (await Person.update(
-      {
-        userName,
-        password,
-        firstName,
-        lastName,
-        email,
-        phoneNumber,
-        birthDate,
-      },
-      {
-        where: {
+
+    try {
+      return (await Person.update(
+        {
           userName,
+          password,
+          firstName,
+          lastName,
+          email,
+          phoneNumber,
+          birthDate,
         },
-      },
-    )) as any;
+        {
+          where: {
+            userName,
+          },
+        },
+      )) as any;
+    } catch (err) {
+      console.log(err);
+      throw new Error('could not update user');
+    }
   }
 
   @Mutation(() => DeletePersonResponse)
@@ -148,44 +159,48 @@ export class PersonResolver {
 
     const playlists = person.playlists;
     if (Array.isArray(playlists) && playlists.length > 0) {
-      playlists.map(async (playlist) => {
-        if (playlist.people && playlist.people.length > 1) {
-          await PersonPlaylist.destroy({
-            where: {
-              userName,
-              playlistId: playlist.id,
-            },
-          });
-        } else {
-          playlist.songs &&
-            playlist.songs.map(async (song) => {
-              await PlaylistSong.destroy({
-                where: { songId: song.id, playlistId: playlist.id },
-              });
+      await Promise.all(
+        playlists.map((playlist) => {
+          if (playlist.people && playlist.people.length > 1) {
+            PersonPlaylist.destroy({
+              where: {
+                userName,
+                playlistId: playlist.id,
+              },
             });
-          await Playlist.destroy({
-            where: {
-              id: playlist.id,
-            },
-          });
-          await PersonPlaylist.destroy({
-            where: {
-              userName,
-              playlistId: playlist.id,
-            },
-          });
-        }
+          } else {
+            playlist.songs &&
+              playlist.songs.map((song) => {
+                PlaylistSong.destroy({
+                  where: { songId: song.id, playlistId: playlist.id },
+                });
+              });
+            Playlist.destroy({
+              where: {
+                id: playlist.id,
+              },
+            });
+            PersonPlaylist.destroy({
+              where: {
+                userName,
+                playlistId: playlist.id,
+              },
+            });
+          }
+        }),
+      ).catch((err) => {
+        new Error(err);
+        return { success: false };
       });
-      Person.destroy({ where: { userName } });
-      return { success: true };
     }
 
-    // try {
-    //   await Person.destroy({ where: { userName } });
-    // } catch (err) {
-    //   console.log(err);
-    //   return { success: false };
-    // }
-    return { success: false };
+    try {
+      Person.destroy({ where: { userName } });
+    } catch (err) {
+      console.log(err);
+      throw new Error('could not remove user');
+    }
+
+    return { success: true };
   }
 }
