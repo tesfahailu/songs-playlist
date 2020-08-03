@@ -1,3 +1,5 @@
+import { SongResolver } from './graphql/resolvers/SongResolver';
+import { PlaylistResolver } from './graphql/resolvers/PlaylistResolver';
 import { ApolloServer } from 'apollo-server-express';
 import connectToDataBase from './db/sequelize';
 import express from 'express';
@@ -19,7 +21,7 @@ import { AuthResolver } from './graphql/resolvers/authResolver';
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [AuthResolver, PersonResolver],
+      resolvers: [AuthResolver, PersonResolver, PlaylistResolver, SongResolver],
     }),
     context: ({ req, res }) => ({ req, res }),
   });

@@ -21,12 +21,12 @@ import { ObjectType, Field, Int } from 'type-graphql';
 })
 export class Playlist extends Model<Playlist> {
   @Field(() => Int)
-  @Column({ primaryKey: true })
+  @Column({ primaryKey: true, autoIncrement: true })
   id: number;
 
-  @Field({ nullable: true })
+  @Field({ nullable: false })
   @Column
-  name?: string;
+  name: string;
 
   @Field({ nullable: true })
   @CreatedAt
@@ -40,7 +40,7 @@ export class Playlist extends Model<Playlist> {
 
   @Field(() => [Person], { nullable: true })
   @BelongsToMany(() => Person, () => PersonPlaylist)
-  persons?: Person[];
+  people?: Person[];
 
   @Field(() => [Song], { nullable: true })
   @BelongsToMany(() => Song, () => PlaylistSong)

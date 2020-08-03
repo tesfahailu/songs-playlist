@@ -61,5 +61,5 @@ export class Person extends Model<Person> {
 
   @Field(() => [Playlist], { nullable: true })
   @BelongsToMany(() => Playlist, () => PersonPlaylist)
-  playlist?: Playlist[];
+  playlists?: Playlist[];
 }

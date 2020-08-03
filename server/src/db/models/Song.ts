@@ -61,5 +61,5 @@ export class Song extends Model<Song> {
 
   @Field(() => [Playlist], { nullable: true })
   @BelongsToMany(() => Playlist, () => PlaylistSong)
-  playlist?: Playlist[];
+  playlists?: Playlist[];
 }
