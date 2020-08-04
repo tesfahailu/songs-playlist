@@ -65,7 +65,6 @@ export class SongResolver {
         ],
       });
     } catch (err) {
-      console.log(err);
       throw new Error('song id is invalid');
     }
   }
@@ -86,7 +85,6 @@ export class SongResolver {
         ],
       });
     } catch (err) {
-      console.log(err);
       throw new Error('could not find songs');
     }
   }
@@ -107,7 +105,6 @@ export class SongResolver {
         duration,
       });
     } catch (err) {
-      console.log(err);
       throw new Error('could not create song');
     }
   }
@@ -123,7 +120,6 @@ export class SongResolver {
         { where: { id } },
       )) as any;
     } catch (err) {
-      console.log(err);
       throw new Error('could not update song');
     }
   }
@@ -137,7 +133,6 @@ export class SongResolver {
       await Song.destroy({ where: { id } });
       await PlaylistSong.destroy({ where: { songId: id } });
     } catch (err) {
-      console.log(err);
       return { success: false };
     }
     return { success: true };
