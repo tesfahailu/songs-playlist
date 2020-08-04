@@ -17,7 +17,6 @@ export class PlaylistResolver {
     try {
       return await Playlist.findOne({ where: { id }, include: [Song, Person] });
     } catch (err) {
-      console.log(err);
       throw new Error('could not find playlist');
     }
   }
@@ -29,7 +28,6 @@ export class PlaylistResolver {
         include: [Song, Person],
       });
     } catch (err) {
-      console.log(err);
       throw new Error('could not find all playlists');
     }
   }
@@ -52,7 +50,6 @@ export class PlaylistResolver {
       });
       return playlist;
     } catch (err) {
-      console.log(err);
       throw new Error('could not associate user with playlist');
     }
   }
@@ -68,7 +65,6 @@ export class PlaylistResolver {
     try {
       return (await Playlist.update({ name }, { where: { id } })) as any;
     } catch (err) {
-      console.log(err);
       throw new Error('could not update playlist');
     }
   }
@@ -97,7 +93,6 @@ export class PlaylistResolver {
       });
       return { success: true };
     } catch (err) {
-      console.log(err);
       throw new Error('could not add user to playlist');
     }
   }
@@ -131,8 +126,7 @@ export class PlaylistResolver {
           playlist.destroy(),
           personPlaylist.destroy(),
         ]).catch((err) => {
-          new Error(err);
-          return { success: false };
+          throw new Error(err);
         }));
     } else {
       return { success: false };
@@ -161,9 +155,7 @@ export class PlaylistResolver {
       await PlaylistSong.create({ playlistId, songId });
       return { success: true };
     } catch (err) {
-      console.log(err);
-      new Error('could not add song to playlist');
-      return { success: false };
+      throw new Error('could not add song to playlist');
     }
   }
 
@@ -190,9 +182,7 @@ export class PlaylistResolver {
       playlistSong.destroy();
       return { success: true };
     } catch (err) {
-      console.log(err);
-      new Error('could not remove song from playlist');
-      return { success: false };
+      throw new Error('could not remove song from playlist');
     }
   }
 
