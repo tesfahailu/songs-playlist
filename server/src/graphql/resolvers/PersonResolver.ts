@@ -54,7 +54,6 @@ export class PersonResolver {
         include: [{ model: Playlist, include: [{ model: Song }] }],
       });
     } catch (err) {
-      console.log(err);
       throw new Error('user name is invalid');
     }
   }
@@ -71,7 +70,6 @@ export class PersonResolver {
         ],
       });
     } catch (err) {
-      console.log(err);
       throw new Error('could not find users');
     }
   }
@@ -103,7 +101,6 @@ export class PersonResolver {
         birthDate,
       });
     } catch (err) {
-      console.log(err);
       throw new Error('could not create user');
     }
   }
@@ -142,7 +139,6 @@ export class PersonResolver {
         },
       )) as any;
     } catch (err) {
-      console.log(err);
       throw new Error('could not update user');
     }
   }
@@ -197,7 +193,6 @@ export class PersonResolver {
     try {
       Person.destroy({ where: { userName } });
     } catch (err) {
-      console.log(err);
       throw new Error('could not remove user');
     }
 
