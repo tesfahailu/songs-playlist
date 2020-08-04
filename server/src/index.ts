@@ -9,12 +9,21 @@ import { PersonResolver } from './graphql/resolvers/PersonResolver';
 import cookieParser from 'cookie-parser';
 import refreshTokenMiddleware from './middleware/refreshTokenMiddleware';
 import { AuthResolver } from './graphql/resolvers/authResolver';
+import cors from 'cors';
 
 (async () => {
   const app = express();
-  const port = process.env.SERVER_PORT;
+  const serverPort = process.env.SERVER_PORT;
+  const clientDomain = process.env.CLIENT_DOMAIN;
+  const clientPort = process.env.CLIENT_PORT;
 
   connectToDataBase();
+  app.use(
+    cors({
+      origin: `${clientDomain}:${clientPort}`,
+      credentials: true,
+    }),
+  );
   app.use(cookieParser());
   app.get('/', (_req, res) => res.send('Hello World!'));
   app.post('/refresh_token', (req, res) => refreshTokenMiddleware(req, res));
@@ -28,7 +37,7 @@ import { AuthResolver } from './graphql/resolvers/authResolver';
 
   apolloServer.applyMiddleware({ app, cors: false });
 
-  app.listen(port, () =>
-    console.log(`Server listening at http://localhost:${port}`),
+  app.listen(serverPort, () =>
+    console.log(`Server listening at http://localhost:${serverPort}`),
   );
 })();
