@@ -11,7 +11,9 @@ export default async () => {
 
   sequelize
     .authenticate()
-    .then(() => console.log('Data base connected successfully'))
+    .then(async () => {
+      console.log('Data base connected successfully');
+    })
     .catch((err: any) => console.log('Error', err));
 
   return sequelize;
