@@ -9,33 +9,46 @@ import {
 } from 'sequelize-typescript';
 import { Playlist } from './Playlist';
 import { PlaylistSong } from './PlaylistSong';
+import { ObjectType, Field, Int } from 'type-graphql';
 
+@ObjectType()
 @Table({
   tableName: 'song',
   modelName: 'Song',
   underscored: true,
 })
 export class Song extends Model<Song> {
-  @Column
-  name: string;
+  @Column({ primaryKey: true })
+  @Field(() => Int)
+  id: number;
 
+  @Field({ nullable: true })
   @Column
-  artist: string;
+  name?: string;
 
+  @Field({ nullable: true })
   @Column
-  album: string;
+  artist?: string;
 
+  @Field({ nullable: true })
   @Column
-  uri: string;
+  album?: string;
 
+  @Field({ nullable: true })
   @Column
-  releaseDate: Date;
+  uri?: string;
 
+  @Field({ nullable: true })
   @Column
-  genre: string;
+  releaseDate?: Date;
 
+  @Field({ nullable: true })
   @Column
-  duration: number;
+  genre?: string;
+
+  @Field({ nullable: true })
+  @Column
+  duration?: number;
 
   @CreatedAt
   createdAt: Date;
@@ -46,6 +59,7 @@ export class Song extends Model<Song> {
   @DeletedAt
   deletedAt: Date;
 
+  @Field(() => [Playlist], { nullable: true })
   @BelongsToMany(() => Playlist, () => PlaylistSong)
-  playlist: Playlist[];
+  playlists?: Playlist[];
 }

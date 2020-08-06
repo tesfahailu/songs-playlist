@@ -6,36 +6,52 @@ import {
   UpdatedAt,
   DeletedAt,
   BelongsToMany,
+  DataType,
 } from 'sequelize-typescript';
 import { PersonPlaylist } from './PersonPlaylist';
 import { Playlist } from './Playlist';
+import { ObjectType, Field } from 'type-graphql';
 
+@ObjectType()
 @Table({
   tableName: 'person',
   modelName: 'Person',
   underscored: true,
 })
 export class Person extends Model<Person> {
+  @Field()
   @Column({ primaryKey: true })
-  userName: string;
+  username: string;
+
+  @Field({ nullable: true })
+  @Column
+  firstName?: string;
+
+  @Field({ nullable: true })
+  @Column
+  lastName?: string;
+
+  @Field({ nullable: true })
+  @Column
+  email?: string;
 
   @Column
-  firstName: string;
+  password: string;
 
+  @Column({ type: DataType.INTEGER, defaultValue: 0 })
+  tokenVersion: number;
+
+  @Field({ nullable: true })
   @Column
-  lastName: string;
+  phoneNumber?: string;
 
+  @Field({ nullable: true })
   @Column
-  email: string;
+  birthDate?: Date;
 
-  @Column
-  phoneNumber: string;
-
-  @Column
-  birthDate: Date;
-
+  @Field({ nullable: true })
   @CreatedAt
-  createdAt: Date;
+  createdAt?: Date;
 
   @UpdatedAt
   updatedAt: Date;
@@ -43,6 +59,7 @@ export class Person extends Model<Person> {
   @DeletedAt
   deletedAt: Date;
 
+  @Field(() => [Playlist], { nullable: true })
   @BelongsToMany(() => Playlist, () => PersonPlaylist)
-  playlist: Playlist[];
+  playlists?: Playlist[];
 }
