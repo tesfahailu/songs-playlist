@@ -2,13 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
-import { env } from './environments/environment';
-
-const client = new ApolloClient({
-  uri: env.serverURI,
-  cache: new InMemoryCache(),
-});
+import { ApolloProvider } from '@apollo/client';
+import { client } from './services/api';
 
 ReactDOM.render(
   <ApolloProvider client={client}>

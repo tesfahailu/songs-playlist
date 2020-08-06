@@ -5,11 +5,15 @@ const targetPath = './src/environments/environment.ts';
 const targetProdPath = './src/environments/environment.prod.ts';
 const envConfigFile = `export const env = {
     production: false,
-    serverURI: '${process.env.SERVER_URI}'
+    serverURI: '${process.env.SERVER_URI}',
+    graphqlPath: '${process.env.GRAPHQL_PATH}',
+    refreshTokenPath: '${process.env.REFRESH_TOKEN_PATH}'
 };`;
 const envConfigProdFile = `export const env = {
     production: true,
-    serverURI: '${process.env.SERVER_URI}'
+    serverURI: '${process.env.SERVER_URI}',
+    graphqlPath: '${process.env.GRAPHQL_PATH}',
+    refreshTokenPath: '${process.env.REFRESH_TOKEN_PATH}'
 };`;
 
 console.log(
