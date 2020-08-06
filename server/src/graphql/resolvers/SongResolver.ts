@@ -71,22 +71,18 @@ export class SongResolver {
 
   @Query(() => [Song])
   async songs(): Promise<Song[] | null> {
-    try {
-      return await Song.findAll({
-        include: [
-          {
-            model: Playlist,
-            include: [
-              {
-                model: Person,
-              },
-            ],
-          },
-        ],
-      });
-    } catch (err) {
-      throw new Error('could not find songs');
-    }
+    return await Song.findAll({
+      include: [
+        {
+          model: Playlist,
+          include: [
+            {
+              model: Person,
+            },
+          ],
+        },
+      ],
+    });
   }
 
   @Mutation(() => Song)

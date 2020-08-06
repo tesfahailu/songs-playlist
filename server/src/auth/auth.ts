@@ -3,7 +3,7 @@ import { sign } from 'jsonwebtoken';
 
 export const createAccessToken = (person: Person) => {
   return sign(
-    { personUserName: person.userName },
+    { personUserName: person.username },
     process.env.ACCESS_TOKEN_SECRET!,
     {
       expiresIn: '15min',
@@ -13,7 +13,7 @@ export const createAccessToken = (person: Person) => {
 
 export const createRefreshToken = (person: Person) => {
   return sign(
-    { personUserName: person.userName, tokenVersion: person.tokenVersion },
+    { personUserName: person.username, tokenVersion: person.tokenVersion },
     process.env.REFRESH_TOKEN_SECRET!,
     {
       expiresIn: '7d',

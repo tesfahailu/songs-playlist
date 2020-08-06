@@ -23,21 +23,17 @@ export class PlaylistResolver {
 
   @Query(() => [Playlist])
   async playlists(): Promise<Playlist[] | null> {
-    try {
-      return await Playlist.findAll({
-        include: [Song, Person],
-      });
-    } catch (err) {
-      throw new Error('could not find all playlists');
-    }
+    return await Playlist.findAll({
+      include: [Song, Person],
+    });
   }
 
   @Mutation(() => Playlist)
   async createPlaylist(
-    @Arg('userName') userName: string,
+    @Arg('username') username: string,
     @Arg('name') name: string,
   ): Promise<Playlist | null> {
-    const person = await Person.findOne({ where: { userName } });
+    const person = await Person.findOne({ where: { username } });
     if (!person) throw new Error('user does not exist');
 
     const playlist = await Playlist.create({ name });
@@ -45,7 +41,7 @@ export class PlaylistResolver {
 
     try {
       await PersonPlaylist.create({
-        userName,
+        username,
         playlistId: playlist.id,
       });
       return playlist;
@@ -71,24 +67,24 @@ export class PlaylistResolver {
 
   @Mutation(() => SuccessResponse)
   async addPersonToPlaylist(
-    @Arg('userName') userName: string,
+    @Arg('username') username: string,
     @Arg('playlistId') playlistId: number,
   ): Promise<SuccessResponse | null> {
-    const person = await Person.findOne({ where: { userName } });
+    const person = await Person.findOne({ where: { username } });
     if (!person) throw new Error('user name does not exist');
 
     const playlist = await Playlist.findOne({ where: { id: playlistId } });
     if (!playlist) throw new Error('playlist does not exist');
 
     const personPlaylist = await PersonPlaylist.findOne({
-      where: { userName, playlistId },
+      where: { username, playlistId },
     });
     if (personPlaylist)
       throw new Error('user is already associated with playlist');
 
     try {
       await PersonPlaylist.create({
-        userName,
+        username,
         playlistId,
       });
       return { success: true };
@@ -99,37 +95,35 @@ export class PlaylistResolver {
 
   @Mutation(() => SuccessResponse)
   async removePersonFromPlaylist(
-    @Arg('userName') userName: string,
+    @Arg('username') username: string,
     @Arg('playlistId') playlistId: number,
   ) {
-    const person = await Person.findOne({ where: { userName } });
+    const person = await Person.findOne({ where: { username } });
     if (!person) throw new Error('user does not exist');
 
     const playlist = await Playlist.findOne({ where: { id: playlistId } });
     if (!playlist) throw new Error('playlist does not exist');
 
     const personPlaylist = await PersonPlaylist.findOne({
-      where: { userName, playlistId },
+      where: { username, playlistId },
     });
     if (!personPlaylist) throw new Error('person not associated with playlist');
 
-    if (Array.isArray(playlist.people) && playlist.people.length > 1) {
+    if (Array.isArray(playlist.people) && playlist.people.length === 1) {
+      await Promise.all([
+        PlaylistSong.destroy({
+          where: { playlistId: playlist.id },
+        }),
+        playlist.destroy(),
+      ]).catch((err) => {
+        throw new Error(err);
+      });
+    }
+
+    try {
       personPlaylist.destroy();
-    } else if (Array.isArray(playlist.people) && playlist.people.length === 1) {
-      playlist.songs &&
-        (await Promise.all([
-          playlist.songs.map((song) => {
-            PlaylistSong.destroy({
-              where: { playlistId: playlist.id, songId: song.id },
-            });
-          }),
-          playlist.destroy(),
-          personPlaylist.destroy(),
-        ]).catch((err) => {
-          throw new Error(err);
-        }));
-    } else {
-      return { success: false };
+    } catch (err) {
+      throw new Error(err);
     }
     return { success: true };
   }

@@ -16,15 +16,14 @@ class LoginResponse {
 export class AuthResolver {
   @Mutation(() => Boolean)
   async register(
-    @Arg('userName') userName: string,
+    @Arg('username') username: string,
     @Arg('email') email: string,
     @Arg('password') password: string,
   ) {
     const hashedPassword = await hash(password, 12);
-
     try {
       await Person.create({
-        userName,
+        username,
         password: hashedPassword,
         email,
       });
@@ -38,17 +37,16 @@ export class AuthResolver {
 
   @Mutation(() => LoginResponse)
   async login(
-    @Arg('userName') userName: string,
+    @Arg('username') username: string,
     @Arg('password') password: string,
     @Ctx() { res }: MyContext,
   ): Promise<LoginResponse> {
-    const person = await Person.findOne({ where: { userName } });
+    const person = await Person.findOne({ where: { username } });
     if (!person) {
       throw new Error('user was not found');
     }
 
     const valid = await compare(password, person.password);
-    console.log(valid);
     if (!valid) {
       throw new Error('password not found');
     }
@@ -62,11 +60,11 @@ export class AuthResolver {
 
   @Mutation(() => Boolean)
   async revokeRefreshTokenForUser(
-    @Arg('userName', () => String) userName: string,
+    @Arg('username', () => String) username: string,
   ) {
     (await connectToDataBase())
       .getRepository(Person)
-      .increment('tokenVersion', { by: 1, where: { userName } });
+      .increment('tokenVersion', { by: 1, where: { username } });
     return true;
   }
 }

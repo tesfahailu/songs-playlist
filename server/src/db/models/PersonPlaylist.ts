@@ -21,7 +21,7 @@ export class PersonPlaylist extends Model<PersonPlaylist> {
   @Field()
   @ForeignKey(() => Person)
   @Column
-  userName: string;
+  username: string;
 
   @Field()
   @ForeignKey(() => Playlist)

@@ -21,7 +21,7 @@ import { ObjectType, Field } from 'type-graphql';
 export class Person extends Model<Person> {
   @Field()
   @Column({ primaryKey: true })
-  userName: string;
+  username: string;
 
   @Field({ nullable: true })
   @Column

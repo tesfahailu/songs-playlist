@@ -17,7 +17,7 @@ import { Playlist } from './../../db/models/Playlist';
 @ArgsType()
 class PersonArg {
   @Field()
-  userName: string;
+  username: string;
 
   @Field()
   password: string;
@@ -47,10 +47,10 @@ class DeletePersonResponse {
 @Resolver()
 export class PersonResolver {
   @Query(() => Person)
-  async person(@Arg('userName') userName: string): Promise<Person | null> {
+  async person(@Arg('username') username: string): Promise<Person | null> {
     try {
       return await Person.findOne({
-        where: { userName },
+        where: { username },
         include: [{ model: Playlist, include: [{ model: Song }] }],
       });
     } catch (err) {
@@ -60,25 +60,21 @@ export class PersonResolver {
 
   @Query(() => [Person])
   async people(): Promise<Person[] | null> {
-    try {
-      return await Person.findAll({
-        include: [
-          {
-            model: Playlist,
-            include: [Person, Song],
-          },
-        ],
-      });
-    } catch (err) {
-      throw new Error('could not find users');
-    }
+    return await Person.findAll({
+      include: [
+        {
+          model: Playlist,
+          include: [Person, Song],
+        },
+      ],
+    });
   }
 
   @Mutation(() => Person)
   async createPerson(
     @Args()
     {
-      userName,
+      username,
       password,
       firstName,
       lastName,
@@ -87,12 +83,12 @@ export class PersonResolver {
       birthDate,
     }: PersonArg,
   ): Promise<Person | null> {
-    const person = await Person.findOne({ where: { userName } });
+    const person = await Person.findOne({ where: { username } });
     if (person) throw new Error('user name is already used');
 
     try {
       return await Person.create({
-        userName,
+        username,
         password,
         firstName,
         lastName,
@@ -109,7 +105,7 @@ export class PersonResolver {
   async updatePerson(
     @Args()
     {
-      userName,
+      username,
       password,
       firstName,
       lastName,
@@ -118,13 +114,13 @@ export class PersonResolver {
       birthDate,
     }: PersonArg,
   ): Promise<Person | null> {
-    const person = Person.findOne({ where: { userName } });
+    const person = Person.findOne({ where: { username } });
     if (!person) throw new Error('user name does not exist');
 
     try {
       return (await Person.update(
         {
-          userName,
+          username,
           password,
           firstName,
           lastName,
@@ -134,7 +130,7 @@ export class PersonResolver {
         },
         {
           where: {
-            userName,
+            username,
           },
         },
       )) as any;
@@ -145,10 +141,10 @@ export class PersonResolver {
 
   @Mutation(() => DeletePersonResponse)
   async deletePerson(
-    @Arg('userName') userName: string,
+    @Arg('username') username: string,
   ): Promise<DeletePersonResponse> {
     const person = await Person.findOne({
-      where: { userName },
+      where: { username },
       include: [{ model: Playlist, include: [{ model: Song }] }],
     });
     if (!person) throw new Error('user does not exist');
@@ -157,32 +153,22 @@ export class PersonResolver {
     if (Array.isArray(playlists) && playlists.length > 0) {
       await Promise.all(
         playlists.map((playlist) => {
-          if (playlist.people && playlist.people.length > 1) {
-            PersonPlaylist.destroy({
-              where: {
-                userName,
-                playlistId: playlist.id,
-              },
+          if (playlist.people && playlist.people.length === 1) {
+            PlaylistSong.destroy({
+              where: { playlistId: playlist.id },
             });
-          } else {
-            playlist.songs &&
-              playlist.songs.map((song) => {
-                PlaylistSong.destroy({
-                  where: { songId: song.id, playlistId: playlist.id },
-                });
-              });
             Playlist.destroy({
               where: {
                 id: playlist.id,
               },
             });
-            PersonPlaylist.destroy({
-              where: {
-                userName,
-                playlistId: playlist.id,
-              },
-            });
           }
+          PersonPlaylist.destroy({
+            where: {
+              username,
+              playlistId: playlist.id,
+            },
+          });
         }),
       ).catch((err) => {
         new Error(err);
@@ -191,7 +177,7 @@ export class PersonResolver {
     }
 
     try {
-      Person.destroy({ where: { userName } });
+      Person.destroy({ where: { username } });
     } catch (err) {
       throw new Error('could not remove user');
     }

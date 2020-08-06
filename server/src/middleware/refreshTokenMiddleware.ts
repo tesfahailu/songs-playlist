@@ -17,7 +17,7 @@ export default async (req: Request, res: Response) => {
   }
 
   const person = await Person.findOne({
-    where: { userName: payload.personUserName },
+    where: { username: payload.personUserName },
   });
   if (!person) {
     return res.send({ ok: false, accessToken: '' });

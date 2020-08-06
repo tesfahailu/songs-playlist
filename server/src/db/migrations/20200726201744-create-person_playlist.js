@@ -2,11 +2,11 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('person_playlist', {
-      user_name: {
+      username: {
         type: Sequelize.STRING,
         references: {
           model: 'person',
-          key: 'user_name',
+          key: 'username',
         },
         allowNull: false,
         unique: false,
