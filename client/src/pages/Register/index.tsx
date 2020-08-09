@@ -10,8 +10,7 @@ import {
   Box,
   Card,
 } from '@material-ui/core';
-import { StyledTypography } from '../../components/StyledTypography';
-import { Share } from '@material-ui/icons';
+import { StyledLogo } from '../../components/StyledTypography';
 import { CopyRight } from '../../components/CopyRight';
 
 const useStyles = makeStyles((theme) => ({
@@ -23,9 +22,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-  },
-  icon: {
-    marginRight: theme.spacing(0.5),
   },
   form: {
     width: '100%',
@@ -39,13 +35,9 @@ const useStyles = makeStyles((theme) => ({
 export const Register: React.FC = () => {
   const classes = useStyles();
   return (
-    <Container component="main" maxWidth="sm" className={classes.container}>
+    <Container component="main" maxWidth="xs" className={classes.container}>
       <Card className={classes.card}>
-        <StyledTypography>
-          <Share color="primary" className={classes.icon} />
-          Shared
-          <StyledTypography color="primary">Playlist</StyledTypography>
-        </StyledTypography>
+        <StyledLogo />
         <Typography component="h1" variant="h6">
           Register New User
         </Typography>
@@ -71,7 +63,6 @@ export const Register: React.FC = () => {
                 fullWidth
                 id="firstName"
                 label="First Name"
-                autoFocus
               />
             </Grid>
             <Grid item xs={12} sm={6}>

@@ -4,14 +4,8 @@ import App from './App';
 import { ApolloProvider } from '@apollo/client';
 import { client } from './services/api';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { ThemeProvider, createMuiTheme, CssBaseline } from '@material-ui/core';
-
-const theme = createMuiTheme({
-  palette: {
-    primary: { main: '#00838f' },
-    secondary: { main: '#00838f' },
-  },
-});
+import { ThemeProvider, CssBaseline } from '@material-ui/core';
+import { theme } from './components/Theme';
 
 ReactDOM.render(
   <React.StrictMode>
