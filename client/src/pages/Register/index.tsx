@@ -107,7 +107,7 @@ export const Register: React.FC = () => {
           >
             Sign Up
           </Button>
-          <Grid container justify="center">
+          <Grid container justifyContent="center">
             <Grid item>
               <Link href="#" variant="body2">
                 Already have an accout? Sign in
