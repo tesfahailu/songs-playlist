@@ -57,6 +57,7 @@ const useStyles = makeStyles((theme: Theme) =>
       height: '100vh',
       display: 'flex',
       flexDirection: 'column-reverse',
+      overflow: 'scroll',
     },
     children: {
       flexGrow: 1,
@@ -86,7 +87,12 @@ export const MusicToolBar = ({
     <div className={classes.layout}>
       <div className={classes.appBarHeight}></div>
       <div className={classes.children}>{children}</div>
-      <AppBar position="fixed" color="primary" className={classes.appBar}>
+      <AppBar
+        position="fixed"
+        color="primary"
+        className={classes.appBar}
+        component="footer"
+      >
         <Toolbar className={classes.toolBar}>
           <Avatar
             variant="square"

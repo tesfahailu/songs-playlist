@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   List,
   ListItem,
@@ -16,27 +16,13 @@ import {
   Audiotrack as AudiotrackIcon,
   Mic as MicIcon,
   AddCircle as AddCircleIcon,
-  MoreHoriz as MoreHorizIcon,
 } from '@material-ui/icons';
 import { DropDownMenu } from './DropDownMenu';
+import PlaylistDialog from './PlaylistDialog';
+import { Link } from 'react-router-dom';
 
 export const DrawerContent = () => {
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-    console.log(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    console.log('Trying to close');
-    setAnchorEl(null);
-  };
-
-  useEffect(() => {
-    console.log('Value of anchor element', anchorEl);
-  }, [anchorEl]);
 
   return (
     <div>
@@ -46,53 +32,73 @@ export const DrawerContent = () => {
             <StyledLogo />
           </ListItemIcon>
         </ListItem>
-        <ListItem button key="user-settings">
+        <ListItem key="user-settings">
           <Grid
             container
             alignItems="flex-end"
-            justify="space-between"
+            justifyContent="space-between"
             className={classes.userAvatar}
           >
             <Grid item>
               <Avatar alt="image of user" src="/IMG_1191.JPG" />
             </Grid>
-            <Grid item onClick={handleClick}>
-              <MoreHorizIcon />
-              <DropDownMenu anchorEl={anchorEl} handleClose={handleClose} />
+            <Grid item>
+              <DropDownMenu />
             </Grid>
           </Grid>
         </ListItem>
-        <ListItem button key="home">
-          <ListItemText primary="Home" />
-        </ListItem>
+        <StyledLink to="/home">
+          <ListItem button key="home">
+            <ListItemText primary="Home" />
+          </ListItem>
+        </StyledLink>
         <ListSubheader component="div" id="nested-list-subheader-collection">
           My Collection
         </ListSubheader>
         {[
-          ['Playlist', <QueueMusicIcon />],
-          ['Albums', <AlbumIcon />],
-          ['Tracks', <AudiotrackIcon />],
-          ['Artists', <MicIcon />],
-        ].map(([text, icon], index) => (
-          <ListItem button key={text + index.toString()}>
-            <ListItemIcon>{icon}</ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
+          ['Playlist', <QueueMusicIcon />, '/playlist'],
+          ['Albums', <AlbumIcon />, '/album'],
+          ['Tracks', <AudiotrackIcon />, '/track'],
+          ['Artists', <MicIcon />, '/artist'],
+        ].map(([text, icon, route], index) => (
+          <StyledLink to={route as string}>
+            <ListItem button key={text + index.toString()}>
+              <ListItemIcon>{icon}</ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItem>
+          </StyledLink>
         ))}
         <ListSubheader component="div" id="nested-list-subheader-playlist">
           My Playlists
         </ListSubheader>
         <ListItem button>
           <AddCircleIcon className={classes.icon} />
-          <ListItemText primary="Create New Playlist" />
+          <PlaylistDialog />
         </ListItem>
         {['Sleep', 'Cool', 'Gym Workout'].map((text, index) => (
-          <ListItem button key={text + index.toString()}>
-            <ListItemText primary={text} />
-          </ListItem>
+          <StyledLink to="">
+            <ListItem button key={text + index.toString()}>
+              <ListItemText primary={text} />
+            </ListItem>
+          </StyledLink>
         ))}
       </List>
     </div>
+  );
+};
+
+const StyledLink = ({
+  children,
+  ...other
+}: {
+  children: React.ReactNode;
+  to: string;
+}) => {
+  const classes = useStyles();
+  return (
+    <Link className={classes.link} {...other}>
+      {children}
+    </Link>
   );
 };
 
@@ -103,6 +109,10 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     icon: {
       marginRight: 10,
+    },
+    link: {
+      textDecoration: 'none',
+      color: `${theme.palette.text.primary}`,
     },
   }),
 );

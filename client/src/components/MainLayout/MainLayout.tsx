@@ -12,7 +12,7 @@ interface Props {
 
 export default function MainLayout(props: Props) {
   const { children, musicToolBarHeight, drawerWidth } = props;
-  const classes = useStyles();
+  const classes = useStyles(musicToolBarHeight);
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -33,6 +33,7 @@ export default function MainLayout(props: Props) {
       <main className={classes.content}>
         <div className={classes.toolbar} />
         {children}
+        <div className={classes.footerSpacing} />
       </main>
     </div>
   );
@@ -43,11 +44,16 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       display: 'flex',
       height: '100%',
+      overflow: 'scroll',
     },
     toolbar: theme.mixins.toolbar,
     content: {
       flexGrow: 1,
-      padding: theme.spacing(3),
+      padding: theme.spacing(2),
+    },
+    footerSpacing: {
+      width: '100%',
+      height: (musicToolBarHeight) => musicToolBarHeight as any,
     },
   }),
 );
