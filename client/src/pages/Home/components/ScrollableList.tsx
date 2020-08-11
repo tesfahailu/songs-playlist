@@ -3,7 +3,7 @@ import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import { tileData } from './tileData';
-import { Typography } from '@material-ui/core';
+import { MusicCard } from './MusicCard';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -47,31 +47,7 @@ export function ScrollableList() {
               height: 'auto',
             }}
           >
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                flexDirection: 'column',
-                height: '100%',
-              }}
-            >
-              <img
-                src={tile.img}
-                alt={tile.title}
-                style={{ height: 'auto', width: '100%' }}
-              />
-              <div style={{ marginBottom: 50 }}>
-                <Typography variant="caption" className={classes.typography}>
-                  {'listen: new album'.toUpperCase()}
-                </Typography>
-                <Typography variant="subtitle1" className={classes.typography}>
-                  {'Mach-Hommy'}
-                </Typography>
-                <Typography variant="subtitle2" className={classes.typography}>
-                  {'Mach Hard Lemonade'}
-                </Typography>
-              </div>
-            </div>
+            <MusicCard data={tile} />
           </GridListTile>
         ))}
       </GridList>
