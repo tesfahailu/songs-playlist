@@ -9,7 +9,7 @@ import {
   ListSubheader,
 } from '@material-ui/core';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
-import { StyledLogo } from '../../StyledTypography';
+import { StyledLogo } from '../../Logo';
 import {
   QueueMusic as QueueMusicIcon,
   Album as AlbumIcon,

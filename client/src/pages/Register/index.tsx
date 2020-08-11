@@ -10,7 +10,7 @@ import {
   Box,
   Card,
 } from '@material-ui/core';
-import { StyledLogo } from '../../components/StyledTypography';
+import { StyledLogo } from '../../components/Logo';
 import { CopyRight } from '../../components/CopyRight';
 
 const useStyles = makeStyles((theme) => ({

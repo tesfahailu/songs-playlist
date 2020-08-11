@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import {
   AppBar,
   Toolbar,
@@ -46,21 +46,11 @@ const useStyles = makeStyles((theme: Theme) =>
       bottom: 0,
       height: (musicToolBarHeight) => `${musicToolBarHeight}px`,
     },
-    appBarHeight: {
-      height: (musicToolBarHeight) => `${musicToolBarHeight}px`,
-      width: '100%',
-    },
     grow: {
       flexGrow: 1,
     },
-    layout: {
-      height: '100vh',
-      display: 'flex',
-      flexDirection: 'column-reverse',
-      overflow: 'scroll',
-    },
     children: {
-      flexGrow: 1,
+      height: (musicToolBarHeight) => `calc(100vh - ${musicToolBarHeight}px)`,
     },
     avatar: {
       width: theme.spacing(10),
@@ -84,8 +74,7 @@ export const MusicToolBar = ({
   };
   const classes = useStyles(musicToolBarHeight);
   return (
-    <div className={classes.layout}>
-      <div className={classes.appBarHeight}></div>
+    <Fragment>
       <div className={classes.children}>{children}</div>
       <AppBar
         position="fixed"
@@ -144,6 +133,6 @@ export const MusicToolBar = ({
           </div>
         </Toolbar>
       </AppBar>
-    </div>
+    </Fragment>
   );
 };

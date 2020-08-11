@@ -72,7 +72,7 @@ const useStyles = makeStyles<Theme, StyleProps>((theme: Theme) =>
         width: (props) => props.width as any,
         flexShrink: 0,
       },
-      height: (props) => `calc(100% - ${props.height}px)`,
+      height: 'auto',
     },
     drawerPaper: {
       width: (props) => props.width as any,

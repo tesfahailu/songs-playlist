@@ -12,7 +12,7 @@ interface Props {
 
 export default function MainLayout(props: Props) {
   const { children, musicToolBarHeight, drawerWidth } = props;
-  const classes = useStyles(musicToolBarHeight);
+  const classes = useStyles(drawerWidth);
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -20,21 +20,20 @@ export default function MainLayout(props: Props) {
 
   return (
     <div className={classes.root}>
-      <GeneralAppBar
-        drawerWidth={drawerWidth}
-        handleDrawerToggle={handleDrawerToggle}
-      />
       <ResponsiveDrawer
         handleDrawerToggle={handleDrawerToggle}
         musicToolBarHeight={musicToolBarHeight}
         drawerWidth={drawerWidth}
         mobileOpen={mobileOpen}
       />
-      <main className={classes.content}>
-        <div className={classes.toolbar} />
-        {children}
-        <div className={classes.footerSpacing} />
-      </main>
+      <div>
+        <GeneralAppBar
+          drawerWidth={drawerWidth}
+          handleDrawerToggle={handleDrawerToggle}
+        />
+        <div style={{ width: '100%', height: '65px' }} />
+        <main className={classes.main}>{children}</main>
+      </div>
     </div>
   );
 }
@@ -46,14 +45,10 @@ const useStyles = makeStyles((theme: Theme) =>
       height: '100%',
       overflow: 'scroll',
     },
-    toolbar: theme.mixins.toolbar,
-    content: {
-      flexGrow: 1,
-      padding: theme.spacing(2),
-    },
-    footerSpacing: {
-      width: '100%',
-      height: (musicToolBarHeight) => musicToolBarHeight as any,
+    main: {
+      height: 'calc(100% - 65px)',
+      padding: '20px',
+      width: (drawerWidth) => `calc(100vw - ${drawerWidth}px )`,
     },
   }),
 );
