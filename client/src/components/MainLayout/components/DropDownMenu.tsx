@@ -1,27 +1,17 @@
-import React from 'react';
-import {
-  withStyles,
-  makeStyles,
-  Theme,
-  createStyles,
-} from '@material-ui/core/styles';
-import Menu, { MenuProps } from '@material-ui/core/Menu';
+import React, { Fragment } from 'react';
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import DraftsIcon from '@material-ui/icons/Drafts';
-import SendIcon from '@material-ui/icons/Send';
+import { IconButton } from '@material-ui/core';
+import { MoreHoriz as MoreHorizIcon } from '@material-ui/icons';
 
-const StyledMenuItem = ({ children }: { children: React.ReactNode }) => {
-  const classes = useStyles();
-  return <MenuItem className={classes.root}>{children}</MenuItem>;
-};
-
-interface Prop {
-  handleClose: () => void;
-  anchorEl: null | HTMLElement;
-}
+const StyledMenuItem = React.forwardRef(
+  ({ children }: { children: React.ReactNode }, ref) => {
+    const classes = useStyles();
+    return <MenuItem className={classes.root}>{children}</MenuItem>;
+  },
+);
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -39,10 +29,23 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export const DropDownMenu = ({ handleClose, anchorEl }: Prop) => {
+export const DropDownMenu = () => {
   const classes = useStyles();
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
-    <div>
+    <Fragment>
+      <IconButton onClick={handleClick}>
+        <MoreHorizIcon />
+      </IconButton>
       <Menu
         className={classes.paper}
         id="customized-menu"
@@ -52,33 +55,21 @@ export const DropDownMenu = ({ handleClose, anchorEl }: Prop) => {
         elevation={0}
         getContentAnchorEl={null}
         anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'right',
+          vertical: 'center',
+          horizontal: 'center',
         }}
         transformOrigin={{
-          vertical: 'bottom',
+          vertical: 'top',
           horizontal: 'left',
         }}
       >
         <StyledMenuItem>
-          <ListItemIcon>
-            <SendIcon fontSize="small" />
-          </ListItemIcon>
-          <ListItemText primary="Sent mail" />
+          <ListItemText secondary="Settings" />
         </StyledMenuItem>
         <StyledMenuItem>
-          <ListItemIcon>
-            <DraftsIcon fontSize="small" />
-          </ListItemIcon>
-          <ListItemText primary="Drafts" />
-        </StyledMenuItem>
-        <StyledMenuItem>
-          <ListItemIcon>
-            <InboxIcon fontSize="small" />
-          </ListItemIcon>
-          <ListItemText primary="Inbox" />
+          <ListItemText secondary="Logout" />
         </StyledMenuItem>
       </Menu>
-    </div>
+    </Fragment>
   );
 };
